@@ -1,8 +1,17 @@
 package repository
 
-import "github.com/redis/go-redis/v9"
+import (
+	"context"
+	"fmt"
 
-// NewRedisClient creates and returns a configured Redis client.
-func NewRedisClient(addr string) *redis.Client {
-	return redis.NewClient(&redis.Options{Addr: addr})
+	"github.com/redis/go-redis/v9"
+)
+
+// NewRedisClient creates, pings and returns a configured Redis client.
+func NewRedisClient(addr string) (*redis.Client, error) {
+	client := redis.NewClient(&redis.Options{Addr: addr})
+	if err := client.Ping(context.Background()).Err(); err != nil {
+		return nil, fmt.Errorf("redis connection failed: %w", err)
+	}
+	return client, nil
 }

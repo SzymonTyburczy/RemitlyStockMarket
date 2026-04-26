@@ -1,30 +1,29 @@
 package service
 
-import "github.com/szymontyburczy/remitly-stock-market/internal/domain"
+import (
+	"context"
 
-// BankService defines the contract for bank (stock supply) operations.
+	"github.com/szymontyburczy/remitly-stock-market/internal/domain"
+)
+
+// BankService manages the bank's stock inventory.
 type BankService interface {
-	SetStocks(stocks []domain.Stock) error
-	GetStocks() ([]domain.Stock, error)
-	StockExists(name string) (bool, error)
-	// Buy decrements bank supply by 1; returns error if stock unavailable.
-	Buy(stockName string) error
-	// Sell increments bank supply by 1.
-	Sell(stockName string) error
+	SetStocks(ctx context.Context, stocks []domain.Stock) error
+	GetStocks(ctx context.Context) ([]domain.Stock, error)
 }
 
-// WalletService defines the contract for wallet operations.
+// WalletService manages wallet state queries.
 type WalletService interface {
-	GetWallet(walletID string) (*domain.Wallet, error)
-	GetStockQuantity(walletID, stockName string) (int, error)
-	// AddStock increments stock in wallet by 1.
-	AddStock(walletID, stockName string) error
-	// RemoveStock decrements stock in wallet by 1; returns error if none held.
-	RemoveStock(walletID, stockName string) error
+	GetWallet(ctx context.Context, walletID string) (*domain.Wallet, error)
+	GetStockQuantity(ctx context.Context, walletID, stockName string) (int, error)
 }
 
-// AuditService defines the contract for audit log operations.
+// TradeService orchestrates atomic buy/sell between bank and wallet.
+type TradeService interface {
+	ExecuteTrade(ctx context.Context, walletID, stockName string, op domain.OperationType) error
+}
+
+// AuditService provides read access to the audit log.
 type AuditService interface {
-	Append(entry domain.LogEntry) error
-	GetAll() ([]domain.LogEntry, error)
+	GetAll(ctx context.Context) ([]domain.LogEntry, error)
 }
