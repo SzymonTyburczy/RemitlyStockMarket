@@ -28,15 +28,16 @@ func main() {
 	}
 
 	// 3. Wire repositories
-	bankRepo := repository.NewBankRepository(redisClient)
+	bankRepo   := repository.NewBankRepository(redisClient)
 	walletRepo := repository.NewWalletRepository(redisClient)
-	auditRepo := repository.NewAuditRepository(redisClient)
+	auditRepo  := repository.NewAuditRepository(redisClient)
+	tradeRepo  := repository.NewTradeRepository(redisClient)
 
 	// 4. Wire services
-	bankSvc := service.NewBankService(bankRepo)
+	bankSvc   := service.NewBankService(bankRepo)
 	walletSvc := service.NewWalletService(walletRepo)
-	auditSvc := service.NewAuditService(auditRepo)
-	tradeSvc := service.NewTradeService(bankRepo, walletRepo, auditRepo, redisClient)
+	auditSvc  := service.NewAuditService(auditRepo)
+	tradeSvc  := service.NewTradeService(bankRepo, tradeRepo, auditRepo)
 
 	// 5. Wire HTTP router
 	router := handler.NewRouter(walletSvc, bankSvc, tradeSvc, auditSvc)

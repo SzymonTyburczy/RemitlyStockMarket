@@ -34,9 +34,9 @@ func redisClientForTest(t *testing.T) *redis.Client {
 func buildTradeService(t *testing.T, client *redis.Client) service.TradeService {
 	t.Helper()
 	bankRepo := repository.NewBankRepository(client)
-	walletRepo := repository.NewWalletRepository(client)
+	tradeRepo := repository.NewTradeRepository(client)
 	auditRepo := repository.NewAuditRepository(client)
-	return service.NewTradeService(bankRepo, walletRepo, auditRepo, client)
+	return service.NewTradeService(bankRepo, tradeRepo, auditRepo)
 }
 
 func TestTradeService_Buy_Success(t *testing.T) {

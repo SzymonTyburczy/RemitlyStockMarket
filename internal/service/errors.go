@@ -2,7 +2,8 @@ package service
 
 import "errors"
 
-// Sentinel errors returned by services — handlers map these to HTTP status codes.
+// Sentinel errors returned by services.
+// Handlers map these directly to HTTP status codes.
 var (
 	ErrStockNotFound      = errors.New("stock not found")
 	ErrInsufficientBank   = errors.New("insufficient stock in bank")
