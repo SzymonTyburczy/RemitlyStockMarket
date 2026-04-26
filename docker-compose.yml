@@ -10,7 +10,7 @@ services:
 
   stock-service-1:
     build: .
-    restart: unless-stopped
+    restart: "no"
     environment:
       - PORT=3000
       - REDIS_URL=redis:6379
@@ -20,7 +20,7 @@ services:
 
   stock-service-2:
     build: .
-    restart: unless-stopped
+    restart: "no"
     environment:
       - PORT=3000
       - REDIS_URL=redis:6379
@@ -30,7 +30,7 @@ services:
 
   stock-service-3:
     build: .
-    restart: unless-stopped
+    restart: "no"
     environment:
       - PORT=3000
       - REDIS_URL=redis:6379

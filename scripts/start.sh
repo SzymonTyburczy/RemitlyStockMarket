@@ -7,7 +7,7 @@ PORT="${1:?Usage: $0 <port>}"
 export PORT
 
 # Generate nginx.conf from template — substitutes ${PORT}
-envsubst '${PORT}' < nginx/nginx.conf.template > nginx/nginx.conf
+sed "s/\${PORT}/${PORT}/g" nginx/nginx.conf.template > nginx/nginx.conf
 
 docker compose up --build -d
 
