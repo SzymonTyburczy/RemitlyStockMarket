@@ -1,0 +1,21 @@
+# nginx.conf — templated, ${PORT} is replaced by start script
+events {}
+
+http {
+    upstream stock_backend {
+        server stock-service-1:3000;
+        server stock-service-2:3000;
+        server stock-service-3:3000;
+    }
+
+    server {
+        listen ${PORT};
+
+        location / {
+            proxy_pass http://stock_backend;
+            proxy_next_upstream error timeout http_500 http_502 http_503;
+            proxy_connect_timeout 1s;
+            proxy_read_timeout 5s;
+        }
+    }
+}
