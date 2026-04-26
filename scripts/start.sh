@@ -5,6 +5,13 @@ set -euo pipefail
 
 PORT="${1:?Usage: $0 <port>}"
 export PORT
+
+# Generate nginx.conf from template — substitutes ${PORT}
 envsubst '${PORT}' < nginx/nginx.conf.template > nginx/nginx.conf
-PORT=${PORT} docker compose up --build --scale stock-service=3 -d
-echo "Stock Market running at http://localhost:${PORT}"
+
+docker compose up --build -d
+
+echo ""
+echo "✓ Stock Market running at http://localhost:${PORT}"
+echo "  Instances: stock-service-1, stock-service-2, stock-service-3"
+echo "  Shared state: Redis"
